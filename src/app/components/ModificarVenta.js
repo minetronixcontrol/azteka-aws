@@ -1148,6 +1148,7 @@ export default class modificarVenta extends Component {
                         <TableHeaderColumn width='85' dataField='numeroAsiento' editable={ false }>Asiento</TableHeaderColumn>
                         <TableHeaderColumn width='250' dataField='cliente' editable={ false }>Cliente</TableHeaderColumn>
                         <TableHeaderColumn width='150' dataField='dia' editable={ false }>Fecha de Viaje</TableHeaderColumn>
+                        <TableHeaderColumn width='150' dataField='fechaDeVenta' editable={ false }>Fecha de Venta</TableHeaderColumn>
                         <TableHeaderColumn width='150' dataField='origen' editable={ false }>Origen</TableHeaderColumn>
                         <TableHeaderColumn width='150' dataField='destino' editable={ false }>Destino</TableHeaderColumn>
                         <TableHeaderColumn width='110' dataField='razon' editable={ { type: 'select', options: { values: razones } } }>Razón</TableHeaderColumn>
@@ -1165,6 +1166,7 @@ export default class modificarVenta extends Component {
                         <TableHeaderColumn width='85' dataField='numeroAsiento' editable={ { type: 'select', options: { values: optAsientos } } }>Asiento</TableHeaderColumn>
                         <TableHeaderColumn width='250' dataField='cliente' editable={ false }>Cliente</TableHeaderColumn>
                         <TableHeaderColumn width='150' dataField='dia' editable={ false }>Fecha de Viaje</TableHeaderColumn>
+                        <TableHeaderColumn width='150' dataField='fechaDeVenta' editable={ false }>Fecha de Venta</TableHeaderColumn>
                         <TableHeaderColumn width='150' dataField='origen' editable={ false }>Origen</TableHeaderColumn>
                         <TableHeaderColumn width='150' dataField='destino' editable={ false }>Destino</TableHeaderColumn>
                         <TableHeaderColumn width='110' dataField='razon' editable={ { type: 'select', options: { values: razones } } }>Razón</TableHeaderColumn>
