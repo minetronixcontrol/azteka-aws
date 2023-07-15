@@ -16,6 +16,14 @@ const Abordaje = require('../models/ListaDeAbordaje.js');
 const ModificacionCorte = require('../models/ModificacionCorte.js');
 const Pagos = require('../models/Pagos');
 
+const convertDate = (date) => {
+    if(!date) return '';
+    let fecha = new Date(date);
+    let day = fecha.getDate() < 10 ? `0${fecha.getDate()}` : fecha.getDate();
+    let month = fecha.getMonth()+1 < 10 ? `0${fecha.getMonth()+1}` : fecha.getMonth()+1;
+    return `${day}-${month}-${fecha.getFullYear()}`
+}
+
 function getTipoPasajero(tipo) {
     if(tipo == 'adulto'){
         return 'A';
@@ -437,6 +445,7 @@ router.get('/:value/:field', async (req, res) =>{
                         destino: destino.nombre,
                         idViaje: ventas[i].idVenta,
                         dia: ventas[i].fecha,
+                        fechaDeVenta: ventas[i].fechaDeVenta ? convertDate(ventas[i].fechaDeVenta) : '',
                         numeroAsiento: ventas[i].numeroAsiento,
                         status: ventas[i].viajado
                     });
@@ -830,6 +839,7 @@ router.get('/:value/:field', async (req, res) =>{
                         destino: destino.nombre,
                         idViaje: ventas[i].idVenta,
                         dia: ventas[i].fecha,
+                        fechaDeVenta: ventas[i].fechaDeVenta ? convertDate(ventas[i].fechaDeVenta) : '',
                         numeroAsiento: ventas[i].numeroAsiento,
                         status: ventas[i].viajado
                     });
@@ -877,6 +887,7 @@ router.get('/:idUsuario/:opc/:Boletos', async (req, res) =>{ //Obtiene los bolet
                                 destino: destino.nombre,
                                 idViaje: ventas[i].idVenta,
                                 dia: ventas[i].fecha,
+                                fechaDeVenta: ventas[i].fechaDeVenta ? convertDate(ventas[i].fechaDeVenta) : '',
                                 numeroAsiento: ventas[i].numeroAsiento,
                                 status: ventas[i].viajado
                             });
@@ -929,6 +940,7 @@ router.get('/:idUsuario/:opc/:Boletos', async (req, res) =>{ //Obtiene los bolet
                         destino: destino.nombre,
                         idViaje: ventas[i].idVenta,
                         dia: ventas[i].fecha,
+                        fechaDeVenta: ventas[i].fechaDeVenta ? convertDate(ventas[i].fechaDeVenta) : '',
                         numeroAsiento: ventas[i].numeroAsiento,
                         asiento: ventas[i].numeroAsiento,
                         status: ventas[i].viajado
@@ -1251,6 +1263,7 @@ router.get('/:seguridad/:idUsuario/:opc/:value', async (req, res) =>{ //Para mos
                                 origen: origen.nombre,
                                 destino: destino.nombre,
                                 dia: ventas[j].fecha,
+                                fechaDeVenta: ventas[j].fechaDeVenta ? convertDate(ventas[j].fechaDeVenta) : '',
                                 numeroAsiento: ventas[j].numeroAsiento,
                                 tipoDeCambio: ventas[j].tipoCambio
                             });
@@ -1323,6 +1336,7 @@ router.get('/:seguridad/:idUsuario/:opc/:value', async (req, res) =>{ //Para mos
                                 origen: origen.nombre,
                                 destino: destino.nombre,
                                 dia: ventas[j].fecha,
+                                fechaDeVenta: ventas[j].fechaDeVenta ? convertDate(ventas[j].fechaDeVenta) : '',
                                 numeroAsiento: ventas[j].numeroAsiento,
                                 tipoDeCambio: ventas[j].tipoCambio,
                                 idViaje: ventas[j].idVenta,
@@ -1371,6 +1385,7 @@ router.get('/:seguridad/:idUsuario/:opc/:value', async (req, res) =>{ //Para mos
                         destino: destino.nombre,
                         idViaje: ventas[i].idVenta,
                         dia: ventas[i].fecha,
+                        fechaDeVenta: ventas[i].fechaDeVenta ? convertDate(ventas[i].fechaDeVenta) : '',
                         numeroAsiento: ventas[i].numeroAsiento,
                         asiento: ventas[i].numeroAsiento,
                         status: ventas[i].viajado
@@ -1402,6 +1417,7 @@ router.get('/:seguridad/:idUsuario/:opc/:value', async (req, res) =>{ //Para mos
                             'origen': `${origen.nombre} ${origen.municipio} ${origen.estado}`,
                             'destino': `${destino.nombre} ${destino.municipio} ${destino.estado}`,
                             'dia': ventas[i].fecha,
+                            'fechaDeVenta': ventas[i].fechaDeVenta ? convertDate(ventas[i].fechaDeVenta) : '',
                             'asiento': ventas[i].numeroAsiento
                         });
                     }
@@ -1428,6 +1444,7 @@ router.get('/:seguridad/:idUsuario/:opc/:value', async (req, res) =>{ //Para mos
                             'origen': `${origen.nombre} ${origen.municipio} ${origen.estado}`,
                             'destino': `${destino.nombre} ${destino.municipio} ${destino.estado}`,
                             'dia': ventas[i].fecha,
+                            'fechaDeVenta': ventas[i].fechaDeVenta ? convertDate(ventas[i].fechaDeVenta) : '',
                             'asiento': ventas[i].numeroAsiento
                         });
                     }
@@ -1440,6 +1457,7 @@ router.get('/:seguridad/:idUsuario/:opc/:value', async (req, res) =>{ //Para mos
     }
 });
 
+// idVendedor / fecha inicial aaaa-mm-dd / fecha final aaaa-mm-dd / pagado (true/false) / opcion (Corte Ventas || corteReservacion)
 router.get('/:idUsuario/:fi/:ff/:pagado/:opc', async (req, res) => {
     switch (req.params.opc) {
         case 'corteVentas':
@@ -1525,6 +1543,7 @@ router.get('/:idUsuario/:fi/:ff/:pagado/:opc', async (req, res) => {
                         origen: `${origen.municipio} ${origen.estado} ${origen.pais}`,
                         destino: `${destino.municipio} ${destino.estado} ${destino.pais}`,
                         fecha: ven[i].fecha,
+                        fechaDeVenta: ven[i].fechaDeVenta ? convertDate(ven[i].fechaDeVenta) : '',
                         montoMXN: (ven[i].tipoCambio == 'MXN'? (`${ven[i].total}`) : 0 ),
                         //montoMXN: (ven[i].tipoCambio == 'MXN'? (`${ven[i].total}`) : `${parseFloat(ven[i].total)*precioDollar}` ),
                         montoUS: (ven[i].tipoCambio == 'US'? (`${ven[i].total}`) : 0 ),
@@ -1532,6 +1551,19 @@ router.get('/:idUsuario/:fi/:ff/:pagado/:opc', async (req, res) => {
                         usuario: modificacion,
                     });
                 }
+
+                // Ordenando el array por folio
+                respuesta.sort((a, b) => {
+                    const folioA = a.folio;
+                    const folioB = b.folio
+                    if (folioA < folioB) {
+                      return -1;
+                    }
+                    if (folioA > folioB) {
+                      return 1;
+                    }
+                    return 0;
+                });
 
                 totales.totalMXN = parseFloat(totales.subtotalMXN)-parseFloat(totales.comisionesMXN);
                 totales.totalUS = parseFloat(totales.subtotalUS)-parseFloat(totales.comisionesUS);
@@ -1631,6 +1663,7 @@ router.get('/:idUsuario/:fi/:ff/:pagado/:opc', async (req, res) => {
                         origen: `${origen.municipio} ${origen.estado} ${origen.pais}`,
                         destino: `${destino.municipio} ${destino.estado} ${destino.pais}`,
                         fecha: ven[i].fecha,
+                        fechaDeVenta: ven[i].fechaDeVenta ? convertDate(ven[i].fechaDeVenta) : '',
                         montoMXN: (ven[i].tipoCambio == 'MXN'? (`${ven[i].anticipo}`) : 0 ),
                         //montoMXN: (ven[i].tipoCambio == 'MXN'? (`${ven[i].total}`) : `${parseFloat(ven[i].total)*precioDollar}` ),
                         montoUS: (ven[i].tipoCambio == 'US'? (`${ven[i].anticipo}`) : 0 ),
@@ -2092,6 +2125,7 @@ router.put('/:value/:field', async (req, res) => {
                         origen: origen.nombre,
                         destino: destino.nombre,
                         dia: venta.dia,
+                        fechaDeVenta: venta.fechaDeVenta ? convertDate(venta.fechaDeVenta) : '',
                         asiento: venta.numeroAsiento
                     });
                 }

@@ -450,6 +450,7 @@ export default class BoletosPagados extends Component {
                                         <TableHeaderColumn width='300' dataField='origen' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Origen</TableHeaderColumn>
                                         <TableHeaderColumn width='300' dataField='destino' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Destino</TableHeaderColumn>
                                         <TableHeaderColumn width='150' dataField='fecha' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Fecha de Viaje</TableHeaderColumn>
+                                        <TableHeaderColumn width='150' dataField='fechaDeVenta' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Fecha de Venta</TableHeaderColumn>
                                         <TableHeaderColumn width='150' dataField='montoMXN' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Monto MXN</TableHeaderColumn>
                                         <TableHeaderColumn width='150' dataField='montoUS' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Monto US</TableHeaderColumn>
                                         <TableHeaderColumn width='200' dataField='estado' editable={ { type: 'select', options: { values: stateTypes } } }>Estado</TableHeaderColumn>
@@ -465,6 +466,7 @@ export default class BoletosPagados extends Component {
                                         <TableHeaderColumn width='300' dataField='origen' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Origen</TableHeaderColumn>
                                         <TableHeaderColumn width='300' dataField='destino' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Destino</TableHeaderColumn>
                                         <TableHeaderColumn width='150' dataField='fecha' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Fecha de Viaje</TableHeaderColumn>
+                                        <TableHeaderColumn width='150' dataField='fechaDeVenta' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Fecha de Venta</TableHeaderColumn>
                                         <TableHeaderColumn width='150' dataField='montoMXN' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Monto MXN</TableHeaderColumn>
                                         <TableHeaderColumn width='150' dataField='montoUS' editable={ false } tdStyle={ { whiteSpace: 'normal' } }>Monto US</TableHeaderColumn>
                                         <TableHeaderColumn width='200' dataField='estado' editable={ false }>Estado</TableHeaderColumn>

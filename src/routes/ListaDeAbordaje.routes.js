@@ -46,6 +46,8 @@ router.put('/:id', async (req, res) => {
     res.json({status:'abordaje ACTUALIZADO!!!'});
 });
 
+
+// id de viaje // no de asiento // (PorAbordar|Foraneo|Local) // (venta|reservacion) // id de venta
 router.put('/:idViaje/:asiento/:value/:asignacion/:id', async (req, res) => {
     let idViaje = req.params.idViaje;
     let asiento = req.params.asiento;
