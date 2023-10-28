@@ -341,7 +341,8 @@ class FirstStep extends React.Component {
             .then(res => res.json())
             .then(data => {
                 for(let i = 0; i < data.length; i++){
-                    optUsuarios[i] = { 
+                    if(!(this.state.seguridad == 'Viajes' && data[i].seguridad == 'Admin'))
+                    optUsuarios.push({
                         value: data[i]._id,
                         label: `${data[i].nombre} ${data[i].apellidoPaterno} ${data[i].apellidoMaterno}`,
                         username: data[i].nickname,
@@ -350,7 +351,7 @@ class FirstStep extends React.Component {
                         apellidoMaterno: data[i].apellidoMaterno,
                         sucursal: data[i].sucursal,
                         tipoDescuento: '', */
-                    };
+                    })
                 }
                 this.setState({
                     optUsuarios: optUsuarios
