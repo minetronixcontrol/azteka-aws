@@ -1098,6 +1098,12 @@ router.get('/:idUsuario/:opc/:Boletos', async (req, res) =>{ //Obtiene los bolet
                         'pago': ''
                     };
                 }
+
+                respuesta.sort((a, b) => {
+                    const folioA = parseInt(a.folio.split('-')[1]);
+                    const folioB = parseInt(b.folio.split('-')[1]);
+                    return folioA - folioB
+                });
                 totales.totalMXN = parseFloat(totales.subtotalMXN)-parseFloat(totales.comisionesMXN);
                 totales.totalUS = parseFloat(totales.subtotalUS)-parseFloat(totales.comisionesUS);
                 res.json({respuesta, totales});

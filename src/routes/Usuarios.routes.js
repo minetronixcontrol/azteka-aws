@@ -44,7 +44,7 @@ router.get('/:value/:field', async (req, res) =>{
             break;
         case 'ventaAdmin':
             try {
-                let usuario = await Usuario.find({ activo: 'true' }, { nombre: 1, apellidoPaterno: 1, apellidoMaterno: 1, nickname: 1 });
+                let usuario = await Usuario.find({ activo: 'true' }, { nombre: 1, apellidoPaterno: 1, apellidoMaterno: 1, nickname: 1, seguridad: 1 });
                 res.json(usuario);
             } catch (error) {
                 
