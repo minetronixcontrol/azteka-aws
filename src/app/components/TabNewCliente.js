@@ -16,14 +16,17 @@ var newCliente = {
     id_Cliente: '1',
     listaNegra: 'false',
     usuario: ''
-  }
+}
 
-  export default class WizardCliente extends React.Component {
+export default class WizardCliente extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             validationNombre: true,
+            nombre: '',
             validationApellido: true,
+            apellidoPaterno: '',
+            apellidoMaterno: '',
             validationFNacimiento: true,
             validationSexo: true,
             validationNombreCE: true,
@@ -56,16 +59,18 @@ var newCliente = {
 
     validationNombre(e){
         this.setState({
-            validationNombre: true
+            validationNombre: true,
+            nombre: e.target.value.toUpperCase()
         });
-        newCliente.nombre = e.target.value;
+        newCliente.nombre = e.target.value.toUpperCase().trim();
     }
 
     validationApellido(e){
         this.setState({
-            validationApellido: true
+            validationApellido: true,
+            apellidoPaterno: e.target.value.toUpperCase()
         });
-        newCliente.apellidoPaterno = e.target.value;
+        newCliente.apellidoPaterno = e.target.value.toUpperCase().trim();
     }
 
     validationFNacimiento(e){
@@ -84,7 +89,11 @@ var newCliente = {
     }
 
     handleApellidoMaterno(e){
-        newCliente.apellidoMaterno = e.target.value;
+        this.setState({
+            validationApellido: true,
+            apellidoMaterno: e.target.value.toUpperCase()
+        });
+        newCliente.apellidoMaterno = e.target.value.toUpperCase().trim();
     }
     handleCURP(e){
         newCliente.curp = e.target.value;
@@ -225,14 +234,14 @@ var newCliente = {
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="inputNombre">* Nombre:</Label>
                                             <div className={(this.state.validationNombre) ? 'card border-light': 'card border-danger'}>
-                                            <Input type="text" name="inputNombre" id="inputNombre" placeholder="Nombre del cliente" onKeyUp={this.validationNombre} />
+                                            <Input type="text" value={this.state.nombre} name="inputNombre" id="inputNombre" placeholder="Nombre del cliente" onChange={this.validationNombre} />
                                             </div>
                                             <p className={(this.state.validationNombre) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
                                         </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="inputAPaterno">* Apellido Paterno:</Label>
                                             <div className={(this.state.validationApellido) ? 'card border-light': 'card border-danger'}>
-                                            <Input type="text" name="inputAPaterno" id="inputAPaterno" placeholder="Nombre del cliente" onKeyUp={this.validationApellido} />
+                                            <Input type="text" value={this.state.apellidoPaterno} name="inputAPaterno" id="inputAPaterno" placeholder="Nombre del cliente" onChange={this.validationApellido} />
                                             </div>
                                             <p className={(this.state.validationApellido) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
                                         </Col>
@@ -240,7 +249,7 @@ var newCliente = {
                                     <Row>
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="inputAMaterno">Apellido Materno:</Label>
-                                            <Input onKeyUp={this.handleApellidoMaterno} type="text" name="text" id="inputAMaterno" placeholder="Nombre del cliente" />
+                                            <Input value={this.state.apellidoMaterno} onChange={this.handleApellidoMaterno} type="text" name="text" id="inputAMaterno" placeholder="Nombre del cliente" />
                                         </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="dateNacimiento">* Fecha de nacimiento:</Label>
@@ -296,4 +305,4 @@ var newCliente = {
             </div>
         );
     }
-  }
+}
