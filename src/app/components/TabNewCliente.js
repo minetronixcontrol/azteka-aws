@@ -182,6 +182,8 @@ var newCliente = {
     }
 
     saveNewCliente(){
+        // Lanzar indicador Loading
+        this.props.setLoadingComponentVisibility(true);
         console.log('guardando Cliente');
         fetch('/api/Clientes/returnCliente', { //Aqui hace la peticion al servidor
             method: 'POST',
@@ -193,6 +195,7 @@ var newCliente = {
         })
             .then(res => res.json()) //Convierte la respouesta del servidor a formato json para poder mostrarla
             .then(data => {
+                this.props.setLoadingComponentVisibility(false);
                 console.log('idNwCliente', data);
                 this.props.toggle();
                 this.props.refresh(data.data);
@@ -200,6 +203,7 @@ var newCliente = {
                 //this.fetchBoleto();
             }) //Muestra los datos formateados a json
             .catch(err => {
+                this.props.setLoadingComponentVisibility(false);
                 this.props.toggle();
                 console.error(err)
             } );

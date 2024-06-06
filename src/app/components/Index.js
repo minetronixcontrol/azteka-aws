@@ -6,6 +6,8 @@ import {Redirect} from 'react-router-dom';
 import { Button, Badge, Container, Col, CustomInput, Card, CardTitle, CardText, Form, FormGroup, FormText, Input, InputGroup, InputGroupAddon, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from "reactstrap";
 import Select from 'react-select';
 
+import LoadingComponent from "./utils/Components/LoadingComponent";
+
 import GenerarBoleto from "./boletoPDF";
 import WizardCliente from "./TabNewCliente.js";
 
@@ -4254,6 +4256,7 @@ class ThirdStep extends React.Component {
         this.state = {
             validationActualizar: false,
             modal: false,
+            showLoadingComponent: false,
             clientes: [],
             optCliente: [],
             optDescuento: [],
@@ -4281,6 +4284,7 @@ class ThirdStep extends React.Component {
         this.handleOnChangeAmaternoBusqueda = this.handleOnChangeAmaternoBusqueda.bind(this);
 
         this.toggle = this.toggle.bind(this);
+        this.setLoadingComponentVisibility = this.setLoadingComponentVisibility.bind(this);
         this.actualizarListaClientes = this.actualizarListaClientes.bind(this);
         this.comprobarRangoDeFecha = this.comprobarRangoDeFecha.bind(this);
     }
@@ -4479,6 +4483,12 @@ class ThirdStep extends React.Component {
         this.setState(prevState => ({
         modal: !prevState.modal
         }));
+    }
+
+    setLoadingComponentVisibility(value){
+        this.setState({
+            showLoadingComponent: value
+        });
     }
 
     //Sacamos datos del vendedor y sus descuentos disponibles
@@ -5134,9 +5144,12 @@ class ThirdStep extends React.Component {
                 {/* MODAL NUEVO CLIENTE */}
                 <Modal size="lg" isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>Nuevo Cliente</ModalHeader>
-                    <WizardCliente toggle={this.toggle} refresh={this.actualizarListaClientes} usuario={generalData.vendedor.id_Usuario}></WizardCliente>
+                    <WizardCliente setLoadingComponentVisibility={this.setLoadingComponentVisibility} toggle={this.toggle} refresh={this.actualizarListaClientes} usuario={generalData.vendedor.id_Usuario}></WizardCliente>
                 </Modal>
                 {/* FIN MODAL NUEVO CLIENTE */}
+                {/* MODAL LOADING */}
+                    <LoadingComponent display={this.state.showLoadingComponent ? 'block' : 'none'}></LoadingComponent>
+                {/* FIN MODAL LOADING */}
             </div>
         )
     }
