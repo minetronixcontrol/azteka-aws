@@ -865,7 +865,7 @@ router.get('/:idUsuario/:opc/:Boletos', async (req, res) =>{ //Obtiene los bolet
                 let vendedores = await Usuario.find({prefijoFolio: req.params.idUsuario, activo: 'true'});
                 if(vendedores.length > 0){
                     let idVendedor = vendedores[0]._id;
-                    let ventas = await Venta.find({folio: req.params.Boletos, vendedor: idVendedor, activo: 'true'});
+                    let ventas = await Venta.find({folio: req.params.Boletos, vendedor: idVendedor, activo: 'true'}).sort({ folio: -1 });
                     let origenesYdestinos = await Origen.find();
                     if(ventas.length > 0){
                         for (let i = 0; i < ventas.length; i++) {
@@ -962,7 +962,7 @@ router.get('/:idUsuario/:opc/:Boletos', async (req, res) =>{ //Obtiene los bolet
                     totalMXN: 0,
                     totalUS: 0
                 };
-                const venta = await Venta.find({vendedor: req.params.idUsuario, statePagado: 'true', activo: 'true'});
+                const venta = await Venta.find({vendedor: req.params.idUsuario, statePagado: 'true', activo: 'true'}).sort({ folio: -1 });
                 let usuario = await Usuario.findById(req.params.idUsuario);
                 let comisionDollares = parseFloat(usuario.comision);
                 let dollar = await Dollar.find();
@@ -1041,7 +1041,7 @@ router.get('/:idUsuario/:opc/:Boletos', async (req, res) =>{ //Obtiene los bolet
                     totalMXN: 0,
                     totalUS: 0
                 };
-                const venta = await Venta.find({vendedor: req.params.idUsuario, statePagado: 'false', activo: 'true'});
+                const venta = await Venta.find({vendedor: req.params.idUsuario, statePagado: 'false', activo: 'true'}).sort({ folio: -1 });
                 let usuario = await Usuario.findById(req.params.idUsuario);
                 let comisionDollares = parseFloat(usuario.comision);
                 let dollar = await Dollar.find();
@@ -1122,7 +1122,7 @@ router.get('/:idUsuario/:opc/:Boletos', async (req, res) =>{ //Obtiene los bolet
                     totalMXN: 0,
                     totalUS: 0
                 };
-                const venta = await Venta.find({vendedor: req.params.idUsuario, activo: 'true'});
+                const venta = await Venta.find({vendedor: req.params.idUsuario, activo: 'true'}).sort({ folio: -1 });
                 let usuario = await Usuario.findById(req.params.idUsuario);
                 let comisionDollares = parseFloat(usuario.comision);
                 let dollar = await Dollar.find();

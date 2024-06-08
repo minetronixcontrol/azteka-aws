@@ -5438,7 +5438,7 @@ class FourthStep extends React.Component {
                             <td>{this.state.tipoDeCambio}{' $'}{this.state.descuentoNeto}</td>
                             </tr>
                             {
-                                (this.state.tipoUsuario == 'Admin' || this.state.tipoUsuario == 'Matriz' || this.state.descCortesia)?
+                                (this.state.tipoUsuario == 'Admin' || this.state.tipoUsuario == 'Matriz' || this.state.tipoUsuario == 'Viajes' || this.state.descCortesia)?
                                 (
                                     <tr>
                                         <th scope="row">Cortesia:</th>
