@@ -134,7 +134,7 @@ router.get('/:value/:field', async (req, res) =>{
                 //let cliente = await Cliente.find({ nombre: re });
                 //let clientes = await Cliente.find({tags:{$in:["laborum","sunt","nisi"]}},{name:1,tags:1});
                 //La siguiente linea de codigo funciona filtrando solo un campo
-                let clientes = await Cliente.find({ $or: [ { nombre: re }, { apellidoPaterno: re }, { apellidoMaterno: re } ]});
+                let clientes = await Cliente.find({ $and: [ { nombre: re }, { apellidoPaterno: re } ]}).sort( {nombre : 1});
                 //Recorremos clientes y determinamos cuantas veces ha viajado en el año, y en el año pasado.
                 //Si ha viajado 6 veces o más en el presente año o en el pasado, será acreedor del descuento
                 let hoy = new Date();
