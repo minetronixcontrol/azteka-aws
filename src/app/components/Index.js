@@ -4257,6 +4257,7 @@ class ThirdStep extends React.Component {
             validationActualizar: false,
             modal: false,
             showLoadingComponent: false,
+            showNoMatchingResults: false,
             clientes: [],
             optCliente: [],
             optDescuento: [],
@@ -4970,6 +4971,7 @@ class ThirdStep extends React.Component {
 
     //Buscamos los pasajeros que coincidan con lo que introdujo el vendedor
     buscarPasajeros(){
+        this.setLoadingComponentVisibility(true)
         let nom = 'null';
         let ap = 'null';
         let am = 'null';
@@ -4989,13 +4991,26 @@ class ThirdStep extends React.Component {
         fetch(`/api/Clientes/${nom}/${ap}/${am}/`)
           .then(res => res.json())
           .then(data => {
+            if(!data.length){
+                this.setState({
+                    showNoMatchingResults: true
+                })
+            } else {
+                this.setState({
+                    showNoMatchingResults: false
+                })
+            }
             this.setState({
                 resultPasajeros: data
-            })
+            });
+            setTimeout(() => {
+                this.setLoadingComponentVisibility(false);
+            }, 2000);
+          }).catch(err => {
+            setTimeout(() => {
+                this.setLoadingComponentVisibility(false);
+            }, 2000);
           })
-          .then(() => {
-              console.log('resultPasajeros', this.state.resultPasajeros);
-          } )
     }
 
     actualizarListaClientes(clienteNuevo){
@@ -5058,7 +5073,7 @@ class ThirdStep extends React.Component {
                         </Row>
                         <br/>
                         <Row>
-                            <Col lg='6' md='6' sm='12' xs='12'><h5>Resultados de la búsqueda:</h5></Col>
+                            <Col lg='6' md='6' sm='12' xs='12'><h5>Resultados de la búsqueda: {this.state.showNoMatchingResults ? 'No hay datos que coincidan con tu búsqueda' : ''}</h5></Col>
                             <Col lg='6' md='6' sm='12' xs='12'>
                                 <span className="dot nino"></span>{' Niño '}<span className="dot adulto"></span>{' Adulto '}<span className="dot adultoM"></span>{' Adulto Mayor '}
                             </Col>

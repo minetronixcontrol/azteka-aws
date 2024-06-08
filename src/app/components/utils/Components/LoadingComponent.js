@@ -8,13 +8,14 @@ class LoadingComponent extends React.Component {
     return (
       <div style={{display: `${this.props.display}`}}>
         <div id="loadingComponent" style={{
-            width: '100%', 
-            height: '100%', 
+            width: '100vw', 
+            height: '100vh', 
             backgroundColor: 'black', 
             opacity: '30%',
             margin: 'auto', 
-            position: 'absolute', 
+            position: 'fixed', 
             top: 0,
+            left: 0,
             zIndex: 5000
         }}>
         </div>

@@ -204,7 +204,9 @@ export default class WizardCliente extends React.Component {
         })
             .then(res => res.json()) //Convierte la respouesta del servidor a formato json para poder mostrarla
             .then(data => {
-                this.props.setLoadingComponentVisibility(false);
+                setTimeout(() => {
+                    this.props.setLoadingComponentVisibility(false);
+                }, 2000);
                 console.log('idNwCliente', data);
                 this.props.toggle();
                 this.props.refresh(data.data);
@@ -212,7 +214,9 @@ export default class WizardCliente extends React.Component {
                 //this.fetchBoleto();
             }) //Muestra los datos formateados a json
             .catch(err => {
-                this.props.setLoadingComponentVisibility(false);
+                setTimeout(() => {
+                    this.props.setLoadingComponentVisibility(false);
+                }, 2000);
                 this.props.toggle();
                 console.error(err)
             } );
