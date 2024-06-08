@@ -20,7 +20,7 @@ const VentasSchema = new Schema({
     tipoCambio:   {type:String,required:true},
     total:        {type:String,required:true},
     vendedor:     {type:String,required:true},
-    folio:        {type:String,required:true},
+    folio:        {type:Number ,required:true},
     viajado:      {type:String,required:true},
     fechaDeVenta: {type:Date,required:false},
     reasignaciones: {type:Number ,required:false}, //Del 0 al 3, total de veces que se ha reasignado esa venta

@@ -252,8 +252,8 @@ export default class WizardCliente extends React.Component {
                                     </Row>
                                     <Row>
                                         <Col lg={6} md={6} sm={12} xs={12}>
-                                            <Label for="inputAMaterno">Apellido Materno:</Label>
-                                            <Input value={this.state.apellidoMaterno} onChange={this.handleApellidoMaterno} type="text" name="text" id="inputAMaterno" placeholder="Nombre del cliente" />
+                                            <Label for="inputAMaterno">Apellido Materno"no es obligatorio"</Label>
+                                            <Input onKeyUp={this.handleApellidoMaterno} type="text" name="text" id="inputAMaterno" placeholder="Nombre del cliente" />
                                         </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="dateNacimiento">* Fecha de nacimiento:</Label>
@@ -270,7 +270,7 @@ export default class WizardCliente extends React.Component {
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col lg={6} md={6} sm={12} xs={12}>
+                                        <Col lg={6} md={6} sm={12} xs={12}  style={{display:"none"}}>
                                             <Label for="inputCURP">CURP:</Label>
                                             <Input onKeyUp={this.handleCURP} type="text" name="text" id="inputCURP" placeholder="CURP del cliente" />
                                         </Col>
@@ -285,13 +285,13 @@ export default class WizardCliente extends React.Component {
                                         
                                     </Row>
                                     <Row>
-                                        <Col lg={6} md={6} sm={12} xs={12}>
+                                        <Col lg={6} md={6} sm={12} xs={12}  style={{display:"none"}}>
                                             <Label for="inputTel1">Telefono:</Label>
                                             <div>
                                             <Input type="text" name="text" id="inputTel1" placeholder="Teléfono del cliente"/>
                                             </div>
                                         </Col>
-                                        <Col lg={6} md={6} sm={12} xs={12}>
+                                        <Col lg={6} md={6} sm={12} xs={12}  style={{display:"none"}}>
                                             <Label for="inputCorreo">Correo:</Label>
                                             <Input onKeyUp={this.handleEmail} type="email" name="email" id="inputCorreo" placeholder="Correo Electrónico"/>
                                         </Col>
