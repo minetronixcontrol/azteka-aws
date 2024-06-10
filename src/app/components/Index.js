@@ -5060,11 +5060,6 @@ class ThirdStep extends React.Component {
                                         <Input onChange={this.handleOnChangeApaternoBusqueda} type="text" placeholder="Apellido Paterno" />
                                     </FormGroup>
                                     {' '}
-                                    <FormGroup>
-                                        <Input onChange={this.handleOnChangeAmaternoBusqueda} type="text" id="busquedaPasajero" placeholder="Apellido Materno"/>
-                                        <InputGroupAddon addonType="append"><Button onClick={this.buscarPasajeros} color="secondary"><i className="fa fa-search"/></Button></InputGroupAddon>
-                                    </FormGroup>
-                                    {' '}
                                 </Form>
                             </Col>
                             <Col className="btn-nuevoPasajero" lg='4' md='4' sm='4' xs='4'>

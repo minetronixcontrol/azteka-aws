@@ -51,6 +51,7 @@ export default class WizardCliente extends React.Component {
         this.cancelar = this.cancelar.bind(this);
         this.saveNewCliente = this.saveNewCliente.bind(this);
         this.formatDate = this.formatDate.bind(this);
+        this.validateString = this.validateString.bind(this);
 
         newCliente.usuario = this.props.usuario;
     }
@@ -193,7 +194,6 @@ export default class WizardCliente extends React.Component {
     saveNewCliente(){
         // Lanzar indicador Loading
         this.props.setLoadingComponentVisibility(true);
-        console.log('guardando Cliente');
         fetch('/api/Clientes/returnCliente', { //Aqui hace la peticion al servidor
             method: 'POST',
             body: JSON.stringify(newCliente),
@@ -207,11 +207,13 @@ export default class WizardCliente extends React.Component {
                 setTimeout(() => {
                     this.props.setLoadingComponentVisibility(false);
                 }, 2000);
-                console.log('idNwCliente', data);
                 this.props.toggle();
-                this.props.refresh(data.data);
-                //console.log('data', data);
-                //this.fetchBoleto();
+
+                if('status' in data) {
+                    alert(data.status);
+                } else {
+                    this.props.refresh(data.data);
+                }
             }) //Muestra los datos formateados a json
             .catch(err => {
                 setTimeout(() => {
@@ -222,6 +224,17 @@ export default class WizardCliente extends React.Component {
             } );
 
             
+    }
+
+    validateString(e){
+        let key = e.keyCode || e.which;
+        let charPressed = String.fromCharCode(key);
+        let regexAllowedKeys = /([A-Z]|\d| )/;
+
+        if(!regexAllowedKeys.test(charPressed.toUpperCase())) {
+            e.preventDefault();
+            return false
+        }
     }
 
     render() {
@@ -238,23 +251,35 @@ export default class WizardCliente extends React.Component {
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="inputNombre">* Nombre:</Label>
                                             <div className={(this.state.validationNombre) ? 'card border-light': 'card border-danger'}>
-                                            <Input type="text" value={this.state.nombre} name="inputNombre" id="inputNombre" placeholder="Nombre del cliente" onChange={this.validationNombre} />
+                                            <Input 
+                                                type="text" 
+                                                value={this.state.nombre} 
+                                                name="inputNombre" 
+                                                id="inputNombre" 
+                                                placeholder="Nombre del cliente"
+                                                onChange={this.validationNombre} 
+                                                onKeyPress={this.validateString}
+                                            />
                                             </div>
                                             <p className={(this.state.validationNombre) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
                                         </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
-                                            <Label for="inputAPaterno">* Apellido Paterno:</Label>
+                                            <Label for="inputAPaterno">* Apellido(s):</Label>
                                             <div className={(this.state.validationApellido) ? 'card border-light': 'card border-danger'}>
-                                            <Input type="text" value={this.state.apellidoPaterno} name="inputAPaterno" id="inputAPaterno" placeholder="Nombre del cliente" onChange={this.validationApellido} />
+                                            <Input 
+                                                type="text" 
+                                                value={this.state.apellidoPaterno} 
+                                                name="inputAPaterno" 
+                                                id="inputAPaterno" 
+                                                placeholder="Nombre del cliente" 
+                                                onChange={this.validationApellido} 
+                                                onKeyPress={this.validateString}    
+                                            />
                                             </div>
                                             <p className={(this.state.validationApellido) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col lg={6} md={6} sm={12} xs={12}>
-                                            <Label for="inputAMaterno">Apellido Materno"no es obligatorio"</Label>
-                                            <Input onKeyUp={this.handleApellidoMaterno} type="text" name="text" id="inputAMaterno" placeholder="Nombre del cliente" />
-                                        </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="dateNacimiento">* Fecha de nacimiento:</Label>
                                             <div className={(this.state.validationFNacimiento) ? 'card border-light': 'card border-danger'}>
@@ -268,12 +293,6 @@ export default class WizardCliente extends React.Component {
                                             </div>
                                             <p className={(this.state.validationFNacimiento) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
                                         </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col lg={6} md={6} sm={12} xs={12}  style={{display:"none"}}>
-                                            <Label for="inputCURP">CURP:</Label>
-                                            <Input onKeyUp={this.handleCURP} type="text" name="text" id="inputCURP" placeholder="CURP del cliente" />
-                                        </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="exampleCheckbox">*Género</Label>
                                             <div>
@@ -281,6 +300,12 @@ export default class WizardCliente extends React.Component {
                                                 <CustomInput onChange={this.handleOnchageGenero} value="M" type="radio" id="radioMujer" name="radioGenero" label="Mujer" inline />
                                             </div>
                                             <p className={(this.state.validationSexo) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col lg={6} md={6} sm={12} xs={12}  style={{display:"none"}}>
+                                            <Label for="inputCURP">CURP:</Label>
+                                            <Input onKeyUp={this.handleCURP} type="text" name="text" id="inputCURP" placeholder="CURP del cliente" />
                                         </Col>
                                         
                                     </Row>
