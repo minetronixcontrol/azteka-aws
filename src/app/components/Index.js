@@ -5057,7 +5057,7 @@ class ThirdStep extends React.Component {
                                     </FormGroup>
                                     {' '}
                                     <FormGroup>
-                                        <Input onChange={this.handleOnChangeApaternoBusqueda} type="text" placeholder="Apellido Paterno" />
+                                        <Input onChange={this.handleOnChangeApaternoBusqueda} type="text" placeholder="Apellido(s)" />
                                     </FormGroup>
                                     {' '}
                                 </Form>
