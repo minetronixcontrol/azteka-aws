@@ -16,14 +16,17 @@ var newCliente = {
     id_Cliente: '1',
     listaNegra: 'false',
     usuario: ''
-  }
+}
 
-  export default class WizardCliente extends React.Component {
+export default class WizardCliente extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             validationNombre: true,
+            nombre: '',
             validationApellido: true,
+            apellidoPaterno: '',
+            apellidoMaterno: '',
             validationFNacimiento: true,
             validationSexo: true,
             validationNombreCE: true,
@@ -48,6 +51,7 @@ var newCliente = {
         this.cancelar = this.cancelar.bind(this);
         this.saveNewCliente = this.saveNewCliente.bind(this);
         this.formatDate = this.formatDate.bind(this);
+        this.validateString = this.validateString.bind(this);
 
         newCliente.usuario = this.props.usuario;
     }
@@ -56,16 +60,18 @@ var newCliente = {
 
     validationNombre(e){
         this.setState({
-            validationNombre: true
+            validationNombre: true,
+            nombre: e.target.value.toUpperCase()
         });
-        newCliente.nombre = e.target.value;
+        newCliente.nombre = e.target.value.toUpperCase().trim();
     }
 
     validationApellido(e){
         this.setState({
-            validationApellido: true
+            validationApellido: true,
+            apellidoPaterno: e.target.value.toUpperCase()
         });
-        newCliente.apellidoPaterno = e.target.value;
+        newCliente.apellidoPaterno = e.target.value.toUpperCase().trim();
     }
 
     validationFNacimiento(e){
@@ -84,7 +90,11 @@ var newCliente = {
     }
 
     handleApellidoMaterno(e){
-        newCliente.apellidoMaterno = e.target.value;
+        this.setState({
+            validationApellido: true,
+            apellidoMaterno: e.target.value.toUpperCase()
+        });
+        newCliente.apellidoMaterno = e.target.value.toUpperCase().trim();
     }
     handleCURP(e){
         newCliente.curp = e.target.value;
@@ -182,7 +192,8 @@ var newCliente = {
     }
 
     saveNewCliente(){
-        console.log('guardando Cliente');
+        // Lanzar indicador Loading
+        this.props.setLoadingComponentVisibility(true);
         fetch('/api/Clientes/returnCliente', { //Aqui hace la peticion al servidor
             method: 'POST',
             body: JSON.stringify(newCliente),
@@ -193,18 +204,37 @@ var newCliente = {
         })
             .then(res => res.json()) //Convierte la respouesta del servidor a formato json para poder mostrarla
             .then(data => {
-                console.log('idNwCliente', data);
+                setTimeout(() => {
+                    this.props.setLoadingComponentVisibility(false);
+                }, 2000);
                 this.props.toggle();
-                this.props.refresh(data.data);
-                //console.log('data', data);
-                //this.fetchBoleto();
+
+                if('status' in data) {
+                    alert(data.status);
+                } else {
+                    this.props.refresh(data.data);
+                }
             }) //Muestra los datos formateados a json
             .catch(err => {
+                setTimeout(() => {
+                    this.props.setLoadingComponentVisibility(false);
+                }, 2000);
                 this.props.toggle();
                 console.error(err)
             } );
 
             
+    }
+
+    validateString(e){
+        let key = e.keyCode || e.which;
+        let charPressed = String.fromCharCode(key);
+        let regexAllowedKeys = /([A-Z]|\d| )/;
+
+        if(!regexAllowedKeys.test(charPressed.toUpperCase())) {
+            e.preventDefault();
+            return false
+        }
     }
 
     render() {
@@ -221,23 +251,35 @@ var newCliente = {
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="inputNombre">* Nombre:</Label>
                                             <div className={(this.state.validationNombre) ? 'card border-light': 'card border-danger'}>
-                                            <Input type="text" name="inputNombre" id="inputNombre" placeholder="Nombre del cliente" onKeyUp={this.validationNombre} />
+                                            <Input 
+                                                type="text" 
+                                                value={this.state.nombre} 
+                                                name="inputNombre" 
+                                                id="inputNombre" 
+                                                placeholder="Nombre del cliente"
+                                                onChange={this.validationNombre} 
+                                                onKeyPress={this.validateString}
+                                            />
                                             </div>
                                             <p className={(this.state.validationNombre) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
                                         </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
-                                            <Label for="inputAPaterno">* Apellido Paterno:</Label>
+                                            <Label for="inputAPaterno">* Apellido(s):</Label>
                                             <div className={(this.state.validationApellido) ? 'card border-light': 'card border-danger'}>
-                                            <Input type="text" name="inputAPaterno" id="inputAPaterno" placeholder="Nombre del cliente" onKeyUp={this.validationApellido} />
+                                            <Input 
+                                                type="text" 
+                                                value={this.state.apellidoPaterno} 
+                                                name="inputAPaterno" 
+                                                id="inputAPaterno" 
+                                                placeholder="Nombre del cliente" 
+                                                onChange={this.validationApellido} 
+                                                onKeyPress={this.validateString}    
+                                            />
                                             </div>
                                             <p className={(this.state.validationApellido) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col lg={6} md={6} sm={12} xs={12}>
-                                            <Label for="inputAMaterno">Apellido Materno"no es obligatorio"</Label>
-                                            <Input onKeyUp={this.handleApellidoMaterno} type="text" name="text" id="inputAMaterno" placeholder="Nombre del cliente" />
-                                        </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="dateNacimiento">* Fecha de nacimiento:</Label>
                                             <div className={(this.state.validationFNacimiento) ? 'card border-light': 'card border-danger'}>
@@ -251,12 +293,6 @@ var newCliente = {
                                             </div>
                                             <p className={(this.state.validationFNacimiento) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
                                         </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col lg={6} md={6} sm={12} xs={12}  style={{display:"none"}}>
-                                            <Label for="inputCURP">CURP:</Label>
-                                            <Input onKeyUp={this.handleCURP} type="text" name="text" id="inputCURP" placeholder="CURP del cliente" />
-                                        </Col>
                                         <Col lg={6} md={6} sm={12} xs={12}>
                                             <Label for="exampleCheckbox">*Género</Label>
                                             <div>
@@ -264,6 +300,12 @@ var newCliente = {
                                                 <CustomInput onChange={this.handleOnchageGenero} value="M" type="radio" id="radioMujer" name="radioGenero" label="Mujer" inline />
                                             </div>
                                             <p className={(this.state.validationSexo) ? 'textValid': 'textInvalid'}>Campo Obligatorio</p>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col lg={6} md={6} sm={12} xs={12}  style={{display:"none"}}>
+                                            <Label for="inputCURP">CURP:</Label>
+                                            <Input onKeyUp={this.handleCURP} type="text" name="text" id="inputCURP" placeholder="CURP del cliente" />
                                         </Col>
                                         
                                     </Row>
@@ -292,4 +334,4 @@ var newCliente = {
             </div>
         );
     }
-  }
+}

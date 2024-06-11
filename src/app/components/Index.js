@@ -6,6 +6,8 @@ import {Redirect} from 'react-router-dom';
 import { Button, Badge, Container, Col, CustomInput, Card, CardTitle, CardText, Form, FormGroup, FormText, Input, InputGroup, InputGroupAddon, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from "reactstrap";
 import Select from 'react-select';
 
+import LoadingComponent from "./utils/Components/LoadingComponent";
+
 import GenerarBoleto from "./boletoPDF";
 import WizardCliente from "./TabNewCliente.js";
 
@@ -4253,6 +4255,8 @@ class ThirdStep extends React.Component {
         this.state = {
             validationActualizar: false,
             modal: false,
+            showLoadingComponent: false,
+            showNoMatchingResults: false,
             clientes: [],
             optCliente: [],
             optDescuento: [],
@@ -4280,6 +4284,7 @@ class ThirdStep extends React.Component {
         this.handleOnChangeAmaternoBusqueda = this.handleOnChangeAmaternoBusqueda.bind(this);
 
         this.toggle = this.toggle.bind(this);
+        this.setLoadingComponentVisibility = this.setLoadingComponentVisibility.bind(this);
         this.actualizarListaClientes = this.actualizarListaClientes.bind(this);
         this.comprobarRangoDeFecha = this.comprobarRangoDeFecha.bind(this);
     }
@@ -4478,6 +4483,12 @@ class ThirdStep extends React.Component {
         this.setState(prevState => ({
         modal: !prevState.modal
         }));
+    }
+
+    setLoadingComponentVisibility(value){
+        this.setState({
+            showLoadingComponent: value
+        });
     }
 
     //Sacamos datos del vendedor y sus descuentos disponibles
@@ -4959,6 +4970,7 @@ class ThirdStep extends React.Component {
 
     //Buscamos los pasajeros que coincidan con lo que introdujo el vendedor
     buscarPasajeros(){
+        this.setLoadingComponentVisibility(true)
         let nom = 'null';
         let ap = 'null';
         let am = 'null';
@@ -4993,13 +5005,26 @@ class ThirdStep extends React.Component {
         fetch(`/api/Clientes/${nom}/${ap}/${am}/`)
           .then(res => res.json())
           .then(data => {
+            if(!data.length){
+                this.setState({
+                    showNoMatchingResults: true
+                })
+            } else {
+                this.setState({
+                    showNoMatchingResults: false
+                })
+            }
             this.setState({
                 resultPasajeros: data
-            })
+            });
+            setTimeout(() => {
+                this.setLoadingComponentVisibility(false);
+            }, 2000);
+          }).catch(err => {
+            setTimeout(() => {
+                this.setLoadingComponentVisibility(false);
+            }, 2000);
           })
-          .then(() => {
-              console.log('resultPasajeros', this.state.resultPasajeros);
-          } )
     }
 
     actualizarListaClientes(clienteNuevo){
@@ -5046,14 +5071,10 @@ class ThirdStep extends React.Component {
                                     </FormGroup>
                                     {' '}
                                     <FormGroup>
-                                        <Input onChange={this.handleOnChangeApaternoBusqueda} type="text" placeholder="Apellido Paterno" />
+                                        <Input onChange={this.handleOnChangeApaternoBusqueda} type="text" placeholder="Apellido(s)" />
                                     </FormGroup>
                                     {' '}
-                                    <FormGroup>
-                                        <Input onChange={this.handleOnChangeAmaternoBusqueda} type="text" id="busquedaPasajero" placeholder="Apellido Materno"/>
-                                        <InputGroupAddon addonType="append"><Button onClick={this.buscarPasajeros} color="secondary"><i className="fa fa-search"/></Button></InputGroupAddon>
-                                    </FormGroup>
-                                    {' '}
+                                    <InputGroupAddon addonType="append"><Button onClick={this.buscarPasajeros} color="secondary"><i className="fa fa-search"/></Button></InputGroupAddon>
                                 </Form>
                             </Col>
                             <Col className="btn-nuevoPasajero" lg='4' md='4' sm='4' xs='4'>
@@ -5062,7 +5083,7 @@ class ThirdStep extends React.Component {
                         </Row>
                         <br/>
                         <Row>
-                            <Col lg='6' md='6' sm='12' xs='12'><h5>Resultados de la búsqueda:</h5></Col>
+                            <Col lg='6' md='6' sm='12' xs='12'><h5>Resultados de la búsqueda: {this.state.showNoMatchingResults ? 'No hay datos que coincidan con tu búsqueda' : ''}</h5></Col>
                             <Col lg='6' md='6' sm='12' xs='12'>
                                 <span className="dot nino"></span>{' Niño '}<span className="dot adulto"></span>{' Adulto '}<span className="dot adultoM"></span>{' Adulto Mayor '}
                             </Col>
@@ -5148,9 +5169,12 @@ class ThirdStep extends React.Component {
                 {/* MODAL NUEVO CLIENTE */}
                 <Modal size="lg" isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>Nuevo Cliente</ModalHeader>
-                    <WizardCliente toggle={this.toggle} refresh={this.actualizarListaClientes} usuario={generalData.vendedor.id_Usuario}></WizardCliente>
+                    <WizardCliente setLoadingComponentVisibility={this.setLoadingComponentVisibility} toggle={this.toggle} refresh={this.actualizarListaClientes} usuario={generalData.vendedor.id_Usuario}></WizardCliente>
                 </Modal>
                 {/* FIN MODAL NUEVO CLIENTE */}
+                {/* MODAL LOADING */}
+                    <LoadingComponent display={this.state.showLoadingComponent ? 'block' : 'none'}></LoadingComponent>
+                {/* FIN MODAL LOADING */}
             </div>
         )
     }

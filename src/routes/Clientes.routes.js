@@ -442,26 +442,33 @@ router.post('/', async (req, res)=>{
 });
 router.post('/:returnCliente', async (req, res)=>{
     const {nombre, apellidoMaterno, apellidoPaterno, fechaNacimiento, correo, curp, genero, telefono, nombreEmergencia, apellidoMaternoEmergencia, apellidoPaternoEmergencia, parentesco, telefonoEmergencia, activo, id_Cliente, listaNegra, usuario} = req.body;
-    const cliente= new Cliente({nombre, apellidoMaterno, apellidoPaterno, fechaNacimiento, correo, curp, genero, telefono, nombreEmergencia, apellidoMaternoEmergencia, apellidoPaternoEmergencia, parentesco, telefonoEmergencia, activo, id_Cliente, listaNegra, usuario});
+    const cliente = new Cliente({nombre, apellidoMaterno, apellidoPaterno, fechaNacimiento, correo, curp, genero, telefono, nombreEmergencia, apellidoMaternoEmergencia, apellidoPaternoEmergencia, parentesco, telefonoEmergencia, activo, id_Cliente, listaNegra, usuario});
     
-    await cliente.save(function(err, result){
-        if(err) {
-          response = { error: true, message: "Error adding data" };
-        } else {
-          response = { error: false, message: "Data added", 
-          data: {
-              value: result._id, 
-              name: `${result.nombre} ${result.apellidoPaterno} ${result.apellidoMaterno}`,
-              label: `${result.fechaNacimiento}`,
-              telefono: result.telefono,
-              color: getType(result.fechaNacimiento, 'color'),
-              type: getType(result.fechaNacimiento),
-              listaNegra: "false",
-              clienteFrecuente: "false"
-            } };
-        }
-        res.json(response);
-    });
+    let busquedaCliente = await Cliente.find({nombre: nombre, apellidoPaterno: apellidoPaterno, fechaNacimiento: fechaNacimiento, genero: genero})
+
+    if(busquedaCliente.length) {
+        res.json({status:'El cliente que intentas guardar ya existe.'});
+    } else {
+        await cliente.save(function(err, result){
+            if(err) {
+            response = { error: true, message: "Error adding data" };
+            } else {
+            response = { error: false, message: "Data added", 
+            data: {
+                value: result._id, 
+                name: `${result.nombre} ${result.apellidoPaterno} ${result.apellidoMaterno}`,
+                label: `${result.fechaNacimiento}`,
+                telefono: result.telefono,
+                color: getType(result.fechaNacimiento, 'color'),
+                type: getType(result.fechaNacimiento),
+                listaNegra: "false",
+                clienteFrecuente: "false"
+                } };
+            }
+            res.json(response);
+        });
+    }
+    
 });
 router.put('/:id', async (req, res) => {
     const {nombre, apellidoMaterno, apellidoPaterno, fechaNacimiento, correo, curp, genero, telefono, nombreEmergencia, apellidoMaternoEmergencia, apellidoPaternoEmergencia, parentesco, telefonoEmergencia, activo, id_Cliente, listaNegra} = req.body;
