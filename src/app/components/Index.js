@@ -5001,8 +5001,8 @@ class ThirdStep extends React.Component {
             controlCase = 'pasajeroNombreApellido';
         }
 
-      //  fetch(`/api/FindQuery/${nom}/${ap}/${controlCase}/0/100000`)
-        fetch(`/api/Clientes/${nom}/${ap}/${am}/`)
+        //  fetch(`/api/Clientes/${nom}/${ap}/${am}/`)
+        fetch(`/api/FindQuery/${nom}/${ap}/${controlCase}/0/100000`)
           .then(res => res.json())
           .then(data => {
             if(!data.length){
