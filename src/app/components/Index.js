@@ -18,7 +18,6 @@ ReactWizard.defaultProps = {
     progressbar: true
 };
 
-
 var generalData = {
     fechaHoy: '',
     folio: null,
@@ -4976,6 +4975,7 @@ class ThirdStep extends React.Component {
         let ap = 'null';
         let am = 'null';
 
+
         if(this.state.nombreBusqueda != ''){
             nom = this.state.nombreBusqueda
         }
@@ -4988,6 +4988,20 @@ class ThirdStep extends React.Component {
             am = this.state.amaternoBusqueda
         }
 
+        let controlCase = 'null';
+
+        if( nom == 'null' && ap != 'null' ){
+            controlCase = 'pasajeroApellido';
+        }
+
+        if( nom != 'null' && ap == 'null' ){
+            controlCase = 'pasajeroNombre';
+        }
+        if( nom != 'null' && ap != 'null' ){
+            controlCase = 'pasajeroNombreApellido';
+        }
+
+      //  fetch(`/api/FindQuery/${nom}/${ap}/${controlCase}/0/100000`)
         fetch(`/api/Clientes/${nom}/${ap}/${am}/`)
           .then(res => res.json())
           .then(data => {

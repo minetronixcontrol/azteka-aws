@@ -134,7 +134,7 @@ router.get('/:value/:field', async (req, res) =>{
                 //let cliente = await Cliente.find({ nombre: re });
                 //let clientes = await Cliente.find({tags:{$in:["laborum","sunt","nisi"]}},{name:1,tags:1});
                 //La siguiente linea de codigo funciona filtrando solo un campo
-                let clientes = await Cliente.find({ $and: [ { nombre: re }, { apellidoPaterno: re } ]}).sort( {nombre : 1});
+                let clientes = await Cliente.find({ $or: [ { nombre: re }, { apellidoPaterno: re }, { apellidoMaterno: re } ]});
                 //Recorremos clientes y determinamos cuantas veces ha viajado en el año, y en el año pasado.
                 //Si ha viajado 6 veces o más en el presente año o en el pasado, será acreedor del descuento
                 let hoy = new Date();
@@ -172,9 +172,13 @@ router.get('/:nombre/:apaterno/:amaterno', async (req, res) =>{
 
         let clientes = [];
 
-        let rNombre = req.params.nombre;
-        let rApaterno = regApaterno = req.params.apaterno;
-        let rAmaterno = regAmaterno = req.params.amaterno;
+        let Nombre = req.params.nombre;
+        let Apaterno = regApaterno = req.params.apaterno;
+        let Amaterno = rAmaterno = req.params.amaterno;
+        let regularName = `^${Nombre}.*`
+        let rNombre = new RegExp(regularName, "i");
+        let regularApaterno = `^${Apaterno}.*`
+        let rApaterno = new RegExp(regularApaterno, "i");
 
         if(req.params.nombre != 'null' && req.params.apaterno != 'null' && req.params.amaterno != 'null'){
             clientes = await Cliente.find({nombre: rNombre, apellidoPaterno: rApaterno, apellidoMaterno: rAmaterno});
