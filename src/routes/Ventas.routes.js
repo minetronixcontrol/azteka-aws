@@ -635,10 +635,10 @@ router.get('/:value/:field', async (req, res) =>{
                     }
                 }
 
-                res.json({respuesta, selected});
+                return res.json({respuesta, selected});
 
             } catch (error) {
-                res.json(error);
+                return res.json(error);
             }
             break;
         case 'idVenta':

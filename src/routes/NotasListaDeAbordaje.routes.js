@@ -15,9 +15,9 @@ router.get('/:field/:value', async (req, res) =>{
         case 'idViaje':
             try {
                 let notas = await NotasListaDeAbordaje.find({idViaje: req.params.value});
-                res.json(notas);
+                return res.json(notas);
             } catch (error) {
-                res.json(error);
+                return res.json(error);
             }
             break;
     
@@ -25,7 +25,7 @@ router.get('/:field/:value', async (req, res) =>{
             break;
     }
     const notas = await NotasListaDeAbordaje.findById(req.params.id);
-    res.json(notas);
+    return res.json(notas);
 });
 router.post('/', async (req, res)=>{
     const {idViaje, sobres, totalBoletos, sobresPorCobrar, entregadosPor, Notas}  = req.body;
