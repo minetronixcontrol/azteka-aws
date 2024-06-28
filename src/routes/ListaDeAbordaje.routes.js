@@ -47,15 +47,13 @@ router.put('/:id', async (req, res) => {
 });
 
 
-// id de viaje // no de asiento // (PorAbordar|Foraneo|Local) // (venta|reservacion) // id de venta
+// id de viaje // no de asiento // (PorAbordar|Foraneo|Local|null) // (venta|reservacion) // id de venta
 router.put('/:idViaje/:asiento/:value/:asignacion/:id', async (req, res) => {
     let idViaje = req.params.idViaje;
     let asiento = req.params.asiento;
     let value = req.params.value;
     let asignacion = req.params.asignacion;
     let id = req.params.id;
-
-    //res.json({idViaje, asiento, value, asignacion, id});
 
     try {
         let abordaje = await Abordaje.find({idViaje: idViaje, asiento: asiento});
@@ -104,11 +102,11 @@ router.put('/:idViaje/:asiento/:value/:asignacion/:id', async (req, res) => {
                     { viajado : 'true' }
                 );
             }
-            res.json({status: 'guardado'});
         }
     } catch (error) {
-        res.json(error);
+        return res.json(error);
     }
+    return res.json({status: 'guardado'});
 });
 
 router.delete('/:id', async (req, res) => {
