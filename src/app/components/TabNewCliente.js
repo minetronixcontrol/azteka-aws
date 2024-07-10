@@ -229,7 +229,7 @@ export default class WizardCliente extends React.Component {
     validateString(e){
         let key = e.keyCode || e.which;
         let charPressed = String.fromCharCode(key);
-        let regexAllowedKeys = /([A-Z]|\d| )/;
+        let regexAllowedKeys = /([ABCDEFGHIJKLMNÑOPQRSTUVWXYZ]|\d| )/;
 
         if(!regexAllowedKeys.test(charPressed.toUpperCase())) {
             e.preventDefault();
